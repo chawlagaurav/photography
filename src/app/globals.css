@@ -1,0 +1,131 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ivory: #f5f1ea;
+  --ink: #171717;
+  --champagne: #c9b79c;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+html {
+  background: var(--ink);
+}
+
+body {
+  background: var(--ink);
+  color: var(--ivory);
+  font-family: var(--font-dm-sans), sans-serif;
+  overflow-x: hidden;
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Custom cursor hides the native one only on fine pointers */
+@media (hover: hover) and (pointer: fine) {
+  body.has-custom-cursor,
+  body.has-custom-cursor * {
+    cursor: none !important;
+  }
+}
+
+::selection {
+  background: var(--champagne);
+  color: var(--ink);
+}
+
+/* Thin scrollbar on supporting browsers */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--ink);
+}
+::-webkit-scrollbar-thumb {
+  background: #3a3a3a;
+}
+
+.text-outline {
+  -webkit-text-stroke: 1.5px rgba(245, 241, 234, 0.75);
+  color: transparent;
+}
+.text-outline-ink {
+  -webkit-text-stroke: 1px rgba(23, 23, 23, 0.45);
+  color: transparent;
+}
+
+/* Cool blue cinematic grade for the hero image */
+.cine-grade {
+  filter: saturate(0.72) contrast(1.06) brightness(1);
+}
+.cine-wash {
+  background:
+    radial-gradient(130% 100% at 72% 25%, rgba(70, 105, 160, 0.3), transparent 55%),
+    linear-gradient(180deg, rgba(10, 16, 28, 0.45) 0%, rgba(10, 14, 24, 0.18) 42%, rgba(8, 10, 18, 0.82) 100%);
+}
+
+/* Hairline grid rules */
+.hair {
+  background: rgba(245, 241, 234, 0.14);
+}
+
+/* Grain overlay — static raster tile, promoted to its own layer so it never
+   re-rasterizes on scroll. Hidden on touch to save fill-rate. */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.04;
+  transform: translateZ(0);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+@media (hover: none) {
+  .grain::after {
+    display: none;
+  }
+}
+
+/* B&W editorial grade — color blooms in on hover. Applied via .photo. */
+.photo {
+  filter: grayscale(1) contrast(1.02);
+  transition: filter 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.group:hover .photo,
+.photo:hover {
+  filter: grayscale(0) contrast(1);
+}
+@media (hover: none) {
+  /* Touch devices: keep a subtle desaturation, no hover state to trigger. */
+  .photo {
+    filter: grayscale(0.35);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
